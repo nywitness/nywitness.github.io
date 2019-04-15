@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="最近在试用InfluxDB，遇到一些问题，这里汇总一下： Continuous Query 时间偏移问题背景公司业务系统需要使用东八区的时间进行业务查询，所以最初保存influx point的时候，做了时间处理，后来因为需要对大量的数据进行重采样，自然而然想到CQ这个功能，遇到了这个time offset不生效的问题。 重现假设已经生成性能日志表perflog，temp为所在数据库，构建如下的CQ">
+<meta name="keywords" content="问题记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="InfluxDB问题汇总">
+<meta property="og:url" content="http://yoursite.com/2019/04/12/InfluxDB问题汇总/index.html">
+<meta property="og:site_name" content="nywitness">
+<meta property="og:description" content="最近在试用InfluxDB，遇到一些问题，这里汇总一下： Continuous Query 时间偏移问题背景公司业务系统需要使用东八区的时间进行业务查询，所以最初保存influx point的时候，做了时间处理，后来因为需要对大量的数据进行重采样，自然而然想到CQ这个功能，遇到了这个time offset不生效的问题。 重现假设已经生成性能日志表perflog，temp为所在数据库，构建如下的CQ">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-15T08:47:06.368Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="InfluxDB问题汇总">
+<meta name="twitter:description" content="最近在试用InfluxDB，遇到一些问题，这里汇总一下： Continuous Query 时间偏移问题背景公司业务系统需要使用东八区的时间进行业务查询，所以最初保存influx point的时候，做了时间处理，后来因为需要对大量的数据进行重采样，自然而然想到CQ这个功能，遇到了这个time offset不生效的问题。 重现假设已经生成性能日志表perflog，temp为所在数据库，构建如下的CQ">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>InfluxDB问题汇总</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/12/InfluxDB问题汇总/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&text=InfluxDB问题汇总"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&is_video=false&description=InfluxDB问题汇总"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InfluxDB问题汇总&body=Check out this article: http://yoursite.com/2019/04/12/InfluxDB问题汇总/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&name=InfluxDB问题汇总&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Continuous-Query-时间偏移问题"><span class="toc-number">1.</span> <span class="toc-text">Continuous Query 时间偏移问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#背景"><span class="toc-number">1.0.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#重现"><span class="toc-number">1.0.2.</span> <span class="toc-text">重现</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#解决"><span class="toc-number">1.0.3.</span> <span class="toc-text">解决</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        InfluxDB问题汇总
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">nywitness</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-12T07:44:30.000Z" itemprop="datePublished">2019-04-12</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/问题记录/">问题记录</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>最近在试用InfluxDB，遇到一些问题，这里汇总一下：</p>
+<h3 id="Continuous-Query-时间偏移问题"><a href="#Continuous-Query-时间偏移问题" class="headerlink" title="Continuous Query 时间偏移问题"></a>Continuous Query 时间偏移问题</h3><h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>公司业务系统需要使用东八区的时间进行业务查询，所以最初保存<code>influx point</code>的时候，做了时间处理，后来因为需要对大量的数据进行重采样，自然而然想到<code>CQ</code>这个功能，遇到了这个<code>time offset</code>不生效的问题。</p>
+<h5 id="重现"><a href="#重现" class="headerlink" title="重现"></a>重现</h5><p>假设已经生成性能日志表<code>perflog</code>，<code>temp</code>为所在数据库，构建如下的<code>CQ</code>:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> CONTINUOUS <span class="keyword">QUERY</span> cq_2m <span class="keyword">ON</span> temp </span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">        <span class="keyword">SELECT</span> mean(rate) <span class="keyword">AS</span> rate <span class="keyword">INTO</span> temp.autogen.cq_2m </span><br><span class="line">        <span class="keyword">FROM</span> temp.autogen.perflog </span><br><span class="line">        <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="built_in">time</span>(<span class="number">2</span>m,<span class="number">8</span>h) fill(<span class="number">0</span>) </span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+<p>其中，<code>GROUP BY time（2m,8h）</code>表示，每两分钟记录一次<code>rate</code>字段的平均值，存储到表<code>cq_2m</code>中，执行时间偏移八小时，这个语法在<a href="https://docs.influxdata.com/influxdb/v1.7/query_language/continuous_queries/#basic-syntax" target="_blank" rel="noopener">influx官方文档</a>的<code>Example 4</code>中有提到：</p>
+<blockquote>
+<p>Use an <a href="https://docs.influxdata.com/influxdb/v1.7/query_language/data_exploration/#advanced-group-by-time-syntax" target="_blank" rel="noopener">offset interval</a> in the <code>GROUP BY time()</code> clause to alter both the CQ’s default execution time and preset time boundaries.</p>
+</blockquote>
+<p>然而，这个<code>8h</code>的参数只偏移了执行时间，并没有作用到<code>where</code>条件的时间区间，测试日志如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2019-03-27T07:04:00.029446Z info Executing continuous query &#123;&quot;log_id&quot;: &quot;0ERSB7o0000&quot;, &quot;service&quot;: &quot;continuous_querier&quot;, &quot;trace_id&quot;: &quot;0ERVFR7G000&quot;, &quot;op_name&quot;: &quot;continuous_querier_execute&quot;, &quot;name&quot;: &quot;cq_2m&quot;, &quot;db_instance&quot;: &quot;temp&quot;, &quot;start&quot;: &quot;2019-03-27T07:02:00.000000Z&quot;, &quot;end&quot;: &quot;2019-03-27T07:04:00.000000Z&quot;&#125;</span><br><span class="line">2019-03-27T07:04:00.030061Z info Executing query &#123;&quot;log_id&quot;: &quot;0ERSB7o0000&quot;, &quot;service&quot;: &quot;query&quot;, &quot;query&quot;: &quot;SELECT mean(rate) AS rate INTO temp.autogen.cq_2m FROM temp.autogen.perflog WHERE time &gt;= &apos;2019-03-27T07:02:00Z&apos; AND time &lt; &apos;2019-03-27T07:04:00Z&apos; GROUP BY time(2m,8h) fill(0)&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>当时是北京时间<code>15:04:00</code>，但是<code>where time</code>的区间还是提前了八个小时，就是取自<code>influx</code>自带的<code>now()</code>函数，这个函数使用的是<code>UTC</code>时间。</p>
+<h5 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h5><p>提了<a href="https://github.com/influxdata/influxdb/issues/12926" target="_blank" rel="noopener">issue</a>，并没有满意的答复，只能曲线救国。</p>
+<p>思路有两种：</p>
+<ol>
+<li>统一坐标系</li>
+<li>用<code>quartz</code>代替<code>CQ</code>进行重采样</li>
+</ol>
+<p>因为2比较简单，工作量比1小，就选了2。:sweat_smile:</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Continuous-Query-时间偏移问题"><span class="toc-number">1.</span> <span class="toc-text">Continuous Query 时间偏移问题</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#背景"><span class="toc-number">1.0.1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#重现"><span class="toc-number">1.0.2.</span> <span class="toc-text">重现</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#解决"><span class="toc-number">1.0.3.</span> <span class="toc-text">解决</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/12/InfluxDB问题汇总/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&text=InfluxDB问题汇总"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&is_video=false&description=InfluxDB问题汇总"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=InfluxDB问题汇总&body=Check out this article: http://yoursite.com/2019/04/12/InfluxDB问题汇总/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&title=InfluxDB问题汇总"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/12/InfluxDB问题汇总/&name=InfluxDB问题汇总&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 nywitness
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
