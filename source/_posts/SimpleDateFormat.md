@@ -70,11 +70,11 @@ private void subFormat(int patternCharIndex, int count,
 当调用`SimpleDateFormat.format(Date)`方法时，实际是如下的调用：
 
 ```flow
-st=>operation: SimpleDateFormat.format(Date)
-op1=>operation: SimpleDateFormat.format(Date,StringBuffer,FieldPosition)
-op2=>operation: SimpleDateFormat.format(Date,StringBuffer,FieldDelegate)
-op3=>operation: SimpleDateFormat.subFormat(int, int,FieldDelegate,StringBuffer,boolean)
-st->op1->op2->op3
+op1=>operation: DateFormat.format(Date)
+op2=>operation: SimpleDateFormat.format(Date,StringBuffer,FieldPosition)
+op3=>operation: SimpleDateFormat.format(Date,StringBuffer,FieldDelegate)
+op4=>operation: SimpleDateFormat.subFormat(int,int,FieldDelegate,StringBuffer,boolean)
+op1->op2->op3->op4
 ```
 
 `pattern`字符串的转换过程是在构造`SimpleDateFormat`时就完成了，具体可以查看类中的`compile(String pattern)`方法。
