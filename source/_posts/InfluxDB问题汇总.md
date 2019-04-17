@@ -6,13 +6,13 @@ tags: 问题记录
 
 最近在试用InfluxDB，遇到一些问题，这里汇总一下：
 
-### Continuous Query 时间偏移问题
+# Continuous Query 时间偏移问题
 
-##### 背景
+## 背景
 
 公司业务系统需要使用东八区的时间进行业务查询，所以最初保存`influx point`的时候，做了时间处理，后来因为需要对大量的数据进行重采样，自然而然想到`CQ`这个功能，遇到了这个`time offset`不生效的问题。
 
-##### 重现
+## 重现
 
 假设已经生成性能日志表`perflog`，`temp`为所在数据库，构建如下的`CQ`:
 
@@ -38,7 +38,7 @@ END
 
 当时是北京时间`15:04:00`，但是`where time`的区间还是提前了八个小时，就是取自`influx`自带的`now()`函数，这个函数使用的是`UTC`时间。
 
-##### 解决
+## 解决
 
 提了[issue](<https://github.com/influxdata/influxdb/issues/12926>)，并没有满意的答复，只能曲线救国。
 
