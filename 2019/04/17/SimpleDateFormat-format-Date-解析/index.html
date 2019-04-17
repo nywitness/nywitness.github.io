@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="格式化原理用过SimpleDateFormat的朋友都知道，format方法会根据构造的pattern解析日期，比较常见的： 12SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;); // 24小时制SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SimpleDateFormat.format(Date)解析">
+<meta property="og:url" content="http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/index.html">
+<meta property="og:site_name" content="nywitness">
+<meta property="og:description" content="格式化原理用过SimpleDateFormat的朋友都知道，format方法会根据构造的pattern解析日期，比较常见的： 12SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;); // 24小时制SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-17T08:25:10.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SimpleDateFormat.format(Date)解析">
+<meta name="twitter:description" content="格式化原理用过SimpleDateFormat的朋友都知道，format方法会根据构造的pattern解析日期，比较常见的： 12SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;); // 24小时制SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>SimpleDateFormat.format(Date)解析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/04/12/InfluxDB问题汇总/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&text=SimpleDateFormat.format(Date)解析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&is_video=false&description=SimpleDateFormat.format(Date)解析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SimpleDateFormat.format(Date)解析&body=Check out this article: http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&name=SimpleDateFormat.format(Date)解析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#格式化原理"><span class="toc-number">1.</span> <span class="toc-text">格式化原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-number">2.</span> <span class="toc-text">测试</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SimpleDateFormat.format(Date)解析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">nywitness</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-17T07:48:54.000Z" itemprop="datePublished">2019-04-17</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Java/">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="格式化原理"><a href="#格式化原理" class="headerlink" title="格式化原理"></a>格式化原理</h1><p>用过<code>SimpleDateFormat</code>的朋友都知道，<code>format</code>方法会根据构造的<code>pattern</code>解析日期，比较常见的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>); <span class="comment">// 24小时制</span></span><br><span class="line">SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd hh:mm:ss"</span>); <span class="comment">// 12小时制</span></span><br></pre></td></tr></table></figure>
+<p>翻看了源码，发现jdk的格式化思路是将<code>Date</code>转换成<code>Calendar</code>，将诸如<code>yyyy-MM-dd hh:mm:ss</code>的格式化<code>pattern</code>转化成一个数组，对于数组中每个元素，找到对应的<code>Calendar</code>中的<code>Field</code>，最后用<code>get(int field)</code>方法拿到对应的数值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Map index into pattern character string to Calendar field number</span></span><br><span class="line"><span class="comment">// 这里写的很清楚，将pattern字符映射到Calendar的field</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span>[] PATTERN_INDEX_TO_CALENDAR_FIELD =</span><br><span class="line">&#123;</span><br><span class="line">    Calendar.ERA, Calendar.YEAR, Calendar.MONTH, Calendar.DATE,</span><br><span class="line">    Calendar.HOUR_OF_DAY, Calendar.HOUR_OF_DAY, Calendar.MINUTE,</span><br><span class="line">    Calendar.SECOND, Calendar.MILLISECOND, Calendar.DAY_OF_WEEK,</span><br><span class="line">    Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK_IN_MONTH,</span><br><span class="line">    Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH,</span><br><span class="line">    Calendar.AM_PM, Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,</span><br><span class="line">    Calendar.ZONE_OFFSET,</span><br><span class="line">    <span class="comment">// Pseudo Calendar fields</span></span><br><span class="line">    CalendarBuilder.WEEK_YEAR,</span><br><span class="line">    CalendarBuilder.ISO_DAY_OF_WEEK,</span><br><span class="line">    Calendar.ZONE_OFFSET</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Private member function that does the real date/time formatting.</span></span><br><span class="line"><span class="comment"> * 实际完成格式化工作的方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">subFormat</span><span class="params">(<span class="keyword">int</span> patternCharIndex, <span class="keyword">int</span> count,</span></span></span><br><span class="line"><span class="function"><span class="params">                       FieldDelegate delegate, StringBuffer buffer,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">boolean</span> useDateFormatSymbols)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>     maxIntCount = Integer.MAX_VALUE;</span><br><span class="line">    String  current = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span>     beginOffset = buffer.length();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从映射中拿到Calendar的field索引值</span></span><br><span class="line">    <span class="keyword">int</span> field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    <span class="keyword">if</span> (field == CalendarBuilder.WEEK_YEAR) &#123;</span><br><span class="line">        <span class="keyword">if</span> (calendar.isWeekDateSupported()) &#123;</span><br><span class="line">            value = calendar.getWeekYear();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// use calendar year 'y' instead</span></span><br><span class="line">            patternCharIndex = PATTERN_YEAR;</span><br><span class="line">            field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];</span><br><span class="line">            value = calendar.get(field);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (field == CalendarBuilder.ISO_DAY_OF_WEEK) &#123;</span><br><span class="line">        value = CalendarBuilder.toISODayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 获取真实值</span></span><br><span class="line">        value = calendar.get(field);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当调用<code>SimpleDateFormat.format(Date)</code>方法时，实际是如下的调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;operation: SimpleDateFormat.format(Date)</span><br><span class="line">op1=&gt;operation: SimpleDateFormat.format(Date,StringBuffer,FieldPosition)</span><br><span class="line">op2=&gt;operation: SimpleDateFormat.format(Date,StringBuffer,FieldDelegate)</span><br><span class="line">op3=&gt;operation: SimpleDateFormat.subFormat(int, int,FieldDelegate,StringBuffer,boolean)</span><br><span class="line">st-&gt;op1-&gt;op2-&gt;op3</span><br></pre></td></tr></table></figure>
+<p><code>pattern</code>字符串的转换过程是在构造<code>SimpleDateFormat</code>时就完成了，具体可以查看类中的<code>compile(String pattern)</code>方法。</p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Calendar c = Calendar.getInstance();</span><br><span class="line">c.setTime(date);</span><br><span class="line">System.out.println(c.get(<span class="number">10</span>)); <span class="comment">// 4。  这里的10对应 Calendar.HOUR</span></span><br><span class="line">System.out.println(c.get(<span class="number">11</span>)); <span class="comment">// 16。 11对应 Calendar.HOUR_OF_DAY</span></span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#格式化原理"><span class="toc-number">1.</span> <span class="toc-text">格式化原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-number">2.</span> <span class="toc-text">测试</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&text=SimpleDateFormat.format(Date)解析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&is_video=false&description=SimpleDateFormat.format(Date)解析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SimpleDateFormat.format(Date)解析&body=Check out this article: http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&title=SimpleDateFormat.format(Date)解析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/17/SimpleDateFormat-format-Date-解析/&name=SimpleDateFormat.format(Date)解析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 nywitness
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
