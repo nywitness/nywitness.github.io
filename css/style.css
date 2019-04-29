@@ -434,8 +434,8 @@ body td {
 }
 @font-face {
   font-style: normal;
-  font-family: "yahei";
-  src: local("微软雅黑"), url("../lib/yahei/yahei.ttf") format("truetype");
+  font-family: "consolas";
+  src: local("consolas"), url("../lib/consolas/consolas.ttf") format("truetype");
 }
 *,
 *:before,
@@ -458,7 +458,7 @@ body {
   font-display: swap;
   font-weight: 400;
   font-size: 16px;
-  font-family: "yahei", "yahei", monospace;
+  font-family: "consolas", "consolas", monospace;
   line-height: 1.725;
   text-rendering: geometricPrecision;
   flex: 1;
@@ -1439,7 +1439,7 @@ pre {
   border: 1px dotted #666;
   border-radius: 4px;
   font-size: 13px;
-  font-family: "yahei", "yahei", monospace;
+  font-family: "consolas", "consolas", monospace;
   line-height: 22px;
   -webkit-border-radius: 4px;
 }
@@ -1460,7 +1460,7 @@ code {
   padding: 10px 15px;
   border-radius: 4px;
   background: #fafafa;
-  font-family: "yahei", "yahei", monospace;
+  font-family: "consolas", "consolas", monospace;
   -webkit-border-radius: 4px;
 }
 .highlight figcaption {
