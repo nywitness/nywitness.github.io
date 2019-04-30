@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="别名通常使用git bash提交代码时，需要add，commit，push三步，大多数情况下，add和commint可以合为一步，就可以使用alias这个配置，在git config --help中找到alias的说明：  alias.* Command aliases for the git command wrapper - e.g. after defining “alias.last =">
+<meta name="keywords" content="工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git troubleshooting">
+<meta property="og:url" content="http://yoursite.com/2019/04/30/Git-troubleshooting/index.html">
+<meta property="og:site_name" content="nywitness">
+<meta property="og:description" content="别名通常使用git bash提交代码时，需要add，commit，push三步，大多数情况下，add和commint可以合为一步，就可以使用alias这个配置，在git config --help中找到alias的说明：  alias.* Command aliases for the git command wrapper - e.g. after defining “alias.last =">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-30T02:38:58.281Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git troubleshooting">
+<meta name="twitter:description" content="别名通常使用git bash提交代码时，需要add，commit，push三步，大多数情况下，add和commint可以合为一步，就可以使用alias这个配置，在git config --help中找到alias的说明：  alias.* Command aliases for the git command wrapper - e.g. after defining “alias.last =">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Git troubleshooting</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/04/17/SimpleDateFormat/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/30/Git-troubleshooting/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&text=Git troubleshooting"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&is_video=false&description=Git troubleshooting"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git troubleshooting&body=Check out this article: http://yoursite.com/2019/04/30/Git-troubleshooting/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&name=Git troubleshooting&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#别名"><span class="toc-number">1.</span> <span class="toc-text">别名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件路径乱码"><span class="toc-number">2.</span> <span class="toc-text">文件路径乱码</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Git troubleshooting
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">nywitness</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-30T02:18:30.000Z" itemprop="datePublished">2019-04-30</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/工具/">工具</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h1><p>通常使用<code>git bash</code>提交代码时，需要<code>add</code>，<code>commit</code>，<code>push</code>三步，大多数情况下，<code>add</code>和<code>commint</code>可以合为一步，就可以使用<code>alias</code>这个配置，在<code>git config --help</code>中找到<code>alias</code>的说明：</p>
+<blockquote>
+<p><strong><code>alias.*</code></strong></p>
+<p>Command aliases for the git command wrapper - e.g. after defining “alias.last = cat-file commit HEAD”, the invocation “git last” is equivalent to “git cat-file commit HEAD”. To avoid confusion and troubles with script usage, aliases that hide existing Git commands are ignored. Arguments are split by spaces, the usual shell quoting and escaping is supported. A quote pair or a backslash can be used to quote them.</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config alias.ac <span class="string">'!git add -A &amp;&amp; git commit -m'</span>//定义ac命令</span><br><span class="line">git ac <span class="string">'feat: 新增ac命令'</span>//调用ac命令</span><br></pre></td></tr></table></figure>
+<h1 id="文件路径乱码"><a href="#文件路径乱码" class="headerlink" title="文件路径乱码"></a>文件路径乱码</h1><p>使用git时出现的文件路径乱码问题，翻阅帮助文档，找到如下配置：</p>
+<blockquote>
+<p><strong><code>core.quotePath</code></strong></p>
+<p>Commands that output paths (e.g. <em>ls-files</em>, <em>diff</em>), will quote “unusual” characters in the pathname by enclosing the pathname in double-quotes and escaping those characters with backslashes in the same way C escapes control characters (e.g. <code>\t</code> for TAB, <code>\n</code> for LF, <code>\\</code> for backslash) or bytes with values larger than 0x80 (e.g. octal <code>\302\265</code> for “micro” in UTF-8). If this variable is set to false, bytes higher than 0x80 are not considered “unusual” any more. Double-quotes, backslash and control characters are always escaped regardless of the setting of this variable. A simple space character is not considered “unusual”. Many commands can output pathnames completely verbatim using the <code>-z</code>option. The default value is true.</p>
+</blockquote>
+<p>可以看到，该属性对路径名做了处理，默认值为<code>true</code>，改为<code>false</code>并将<code>git bash</code>字符集改成<code>UTF-8</code>即可解决。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#别名"><span class="toc-number">1.</span> <span class="toc-text">别名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件路径乱码"><span class="toc-number">2.</span> <span class="toc-text">文件路径乱码</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/04/30/Git-troubleshooting/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&text=Git troubleshooting"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&is_video=false&description=Git troubleshooting"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Git troubleshooting&body=Check out this article: http://yoursite.com/2019/04/30/Git-troubleshooting/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&title=Git troubleshooting"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/04/30/Git-troubleshooting/&name=Git troubleshooting&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 nywitness
+    <a href="https://hexo.io/">Hexo</a> Theme <a href="https://github.com/probberechts/hexo-theme-cactus">Cactus</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
