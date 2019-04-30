@@ -4,7 +4,7 @@ date: 2019-04-30 10:18:30
 tags: 工具
 ---
 
-# 别名
+## 别名
 
 通常使用`git bash`提交代码时，需要`add`，`commit`，`push`三步，大多数情况下，`add`和`commint`可以合为一步，就可以使用`alias`这个配置，在`git config --help`中找到`alias`的说明：
 
@@ -17,7 +17,7 @@ git config alias.ac '!git add -A && git commit -m'//定义ac命令
 git ac 'feat: 新增ac命令'//调用ac命令
 ```
 
-# 文件路径乱码
+## 文件路径乱码
 
 使用git时出现的文件路径乱码问题，翻阅帮助文档，找到如下配置：
 
