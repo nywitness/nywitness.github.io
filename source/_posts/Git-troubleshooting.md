@@ -13,7 +13,7 @@ tags: 工具
 > Command aliases for the git command wrapper - e.g. after defining "alias.last = cat-file commit HEAD", the invocation "git last" is equivalent to "git cat-file commit HEAD". To avoid confusion and troubles with script usage, aliases that hide existing Git commands are ignored. Arguments are split by spaces, the usual shell quoting and escaping is supported. A quote pair or a backslash can be used to quote them.
 
 ```sh
-git config alias.ac '!git add -A && git commit -m'//定义ac命令
+git config alias.ac '!git add -A & git commit -m'//定义ac命令
 git ac 'feat: 新增ac命令'//调用ac命令
 ```
 
