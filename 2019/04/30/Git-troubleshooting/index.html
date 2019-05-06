@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="nywitness">
 <meta property="og:description" content="别名通常使用git bash提交代码时，需要add，commit，push三步，大多数情况下，add和commint可以合为一步，就可以使用alias这个配置，在git config --help中找到alias的说明：  alias.* Command aliases for the git command wrapper - e.g. after defining “alias.last =">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-30T03:08:17.131Z">
+<meta property="og:updated_time" content="2019-05-06T03:50:22.040Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git troubleshooting">
 <meta name="twitter:description" content="别名通常使用git bash提交代码时，需要add，commit，push三步，大多数情况下，add和commint可以合为一步，就可以使用alias这个配置，在git config --help中找到alias的说明：  alias.* Command aliases for the git command wrapper - e.g. after defining “alias.last =">
@@ -148,7 +148,7 @@
 <p><strong><code>alias.*</code></strong></p>
 <p>Command aliases for the git command wrapper - e.g. after defining “alias.last = cat-file commit HEAD”, the invocation “git last” is equivalent to “git cat-file commit HEAD”. To avoid confusion and troubles with script usage, aliases that hide existing Git commands are ignored. Arguments are split by spaces, the usual shell quoting and escaping is supported. A quote pair or a backslash can be used to quote them.</p>
 </blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config alias.ac <span class="string">'!git add -A &amp;&amp; git commit -m'</span>//定义ac命令</span><br><span class="line">git ac <span class="string">'feat: 新增ac命令'</span>//调用ac命令</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config alias.ac <span class="string">'!git add -A &amp; git commit -m'</span>//定义ac命令</span><br><span class="line">git ac <span class="string">'feat: 新增ac命令'</span>//调用ac命令</span><br></pre></td></tr></table></figure>
 <h2 id="文件路径乱码"><a href="#文件路径乱码" class="headerlink" title="文件路径乱码"></a>文件路径乱码</h2><p>使用git时出现的文件路径乱码问题，翻阅帮助文档，找到如下配置：</p>
 <blockquote>
 <p><strong><code>core.quotePath</code></strong></p>
@@ -242,6 +242,16 @@
 <!-- Google Analytics -->
 
 <!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b077c36b6e3bb25fa043a94b25d8c4f3";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
 <!-- Disqus Comments -->
 
