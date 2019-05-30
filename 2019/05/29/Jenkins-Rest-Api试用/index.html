@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="安装使用Jenkins Rest Api需要安装Jenkins服务，windows版本的可以直接安装为本地service。Jenkins的默认端口为8080，如果需要，可以在安装路径下找到jenkins.xml文件，修改--httpPort参数为指定端口。 安装完成后，jenkins服务自动启动，访问localhost:[port]后按照提示完成初始配置，包括安装推荐插件。如果遇到插件安装失败的情">
+<meta name="keywords" content="Jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins Rest Api试用">
+<meta property="og:url" content="http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/index.html">
+<meta property="og:site_name" content="nywitness">
+<meta property="og:description" content="安装使用Jenkins Rest Api需要安装Jenkins服务，windows版本的可以直接安装为本地service。Jenkins的默认端口为8080，如果需要，可以在安装路径下找到jenkins.xml文件，修改--httpPort参数为指定端口。 安装完成后，jenkins服务自动启动，访问localhost:[port]后按照提示完成初始配置，包括安装推荐插件。如果遇到插件安装失败的情">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-30T01:32:38.242Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins Rest Api试用">
+<meta name="twitter:description" content="安装使用Jenkins Rest Api需要安装Jenkins服务，windows版本的可以直接安装为本地service。Jenkins的默认端口为8080，如果需要，可以在安装路径下找到jenkins.xml文件，修改--httpPort参数为指定端口。 安装完成后，jenkins服务自动启动，访问localhost:[port]后按照提示完成初始配置，包括安装推荐插件。如果遇到插件安装失败的情">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Jenkins Rest Api试用</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/04/30/Git-troubleshooting/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&text=Jenkins Rest Api试用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&is_video=false&description=Jenkins Rest Api试用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Jenkins Rest Api试用&body=Check out this article: http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&name=Jenkins Rest Api试用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用户凭证"><span class="toc-number">2.1.</span> <span class="toc-text">用户凭证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全局工具配置"><span class="toc-number">2.2.</span> <span class="toc-text">全局工具配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境配置"><span class="toc-number">2.3.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目配置"><span class="toc-number">2.4.</span> <span class="toc-text">项目配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git"><span class="toc-number">2.4.1.</span> <span class="toc-text">git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#build"><span class="toc-number">2.4.2.</span> <span class="toc-text">build</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建后操作"><span class="toc-number">2.4.3.</span> <span class="toc-text">构建后操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Build"><span class="toc-number">3.1.</span> <span class="toc-text">Build</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#case1"><span class="toc-number">3.1.1.</span> <span class="toc-text">case1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#subcase，get-crumb"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">subcase，get crumb</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带crumb的case1"><span class="toc-number">3.1.2.</span> <span class="toc-text">带crumb的case1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取构建详情"><span class="toc-number">3.2.</span> <span class="toc-text">获取构建详情</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Jenkins Rest Api试用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">nywitness</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-05-29T02:29:26.000Z" itemprop="datePublished">2019-05-29</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Jenkins/">Jenkins</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>使用Jenkins Rest Api需要安装Jenkins服务，windows版本的可以直接安装为本地service。Jenkins的默认端口为8080，如果需要，可以在安装路径下找到jenkins.xml文件，修改<code>--httpPort</code>参数为指定端口。</p>
+<p>安装完成后，jenkins服务自动启动，访问<code>localhost:[port]</code>后按照提示完成初始配置，包括安装推荐插件。如果遇到插件安装失败的情况，大多是因为插件由于网络原因不可达，需要升级插件的站点，一般都可以解决。升级站点的可选地址包括但不局限于：<code>http://ftp.tsukuba.wide.ad.jp/software/jenkins/updates/current/update-center.json</code>，可以根据需要替换。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>本次案例主要实现通过Rest Api实现项目远程部署等操作，所以需要如下组件：</p>
+<ul>
+<li><p>用户凭证</p>
+</li>
+<li><p>全局工具配置</p>
+<ul>
+<li>Maven</li>
+<li>JDK</li>
+<li>Git</li>
+</ul>
+</li>
+<li>环境配置<ul>
+<li>邮件通知</li>
+</ul>
+</li>
+<li>项目配置<ul>
+<li>一个demo项目，托管到github</li>
+<li>git</li>
+<li>build</li>
+<li>构建后操作</li>
+</ul>
+</li>
+</ul>
+<h2 id="用户凭证"><a href="#用户凭证" class="headerlink" title="用户凭证"></a>用户凭证</h2><p>访问<code>[Jenkins_url]/credentials</code>，e.g.，<code>http://localhost:11111/credentials</code>。</p>
+<p>配置github和tomcat凭证，后序pull代码和发布到tomcat需要使用到。</p>
+<h2 id="全局工具配置"><a href="#全局工具配置" class="headerlink" title="全局工具配置"></a>全局工具配置</h2><p>访问<code>[Jenkins_url]/configureTools</code>，e.g.，<code>http://localhost:11111/configureTools</code>，根据页面提示配置Maven，Git，JDK。</p>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>访问<code>[Jenkins_url]/configure</code>，e.g.，<code>http://localhost:11111/configure</code>进入系统配置界面，填写邮件通知的SMTP服务器。Jenkins提供了测试按钮来测试邮件配置是否成功。</p>
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>首先需要新建一个构建maven项目的job，接着进行相应的环境配置，访问<code>[Jenkins_url]/job/[jobname]/configure</code>，e.g.，<code>http://localhost:11111/job/maven-hello-world/configure</code>进入目标页面。</p>
+<h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><p>在General签页源码管理项目中选择github仓库和凭证信息，指定需要关联的分支。</p>
+<h3 id="build"><a href="#build" class="headerlink" title="build"></a>build</h3><p>在Build签页选择构建时使用的pom文件，键入构建的命令和选项，e.g.，<code>clean package -Dmaven.test.skip=true</code>。</p>
+<h3 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h3><p>构建完成之后，可以将代码打包发布到指定的tomcat容器（需要安装deploy to container插件），填写war包路径，这里指的是相对于Jenkins工作空间根路径的相对路径、访问路径、指定配置好的tomcat及其凭证。</p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>Jenkins的官方文档中有这样一句话：</p>
+<blockquote>
+<p>Many objects of Jenkins provide the remote access API. They are available at <code>/.../api/</code> where “…” portion is the object for which you’d like to access.</p>
+</blockquote>
+<p>很多jenkins对象都提供了rest api，可以通过在url后追加<code>/api/</code>的方式来查看提供的api，更直观地操作是在jenkins界面的右下角处，如果有<a href>Rest Api</a>字样，直接点击跳转即可。</p>
+<p>本次案例中使用的是<code>http://localhost:11111/job/maven-hello-world/</code>。</p>
+<h2 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h2><h3 id="case1"><a href="#case1" class="headerlink" title="case1"></a>case1</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Method: POST</span><br><span class="line">Url：http://localhost:11111/job/maven-hello-world/build</span><br><span class="line">Response：</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Error 403 No valid crumb was included in the request<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>HTTP ERROR 403<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>Problem accessing /job/maven-hello-world/build. Reason:</span><br><span class="line">			<span class="tag">&lt;<span class="name">pre</span>&gt;</span>    No valid crumb was included in the request<span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://eclipse.org/jetty"</span>&gt;</span>Powered by Jetty:// 9.4.z-SNAPSHOT<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">hr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>提示需要<code>crumb</code>信息，这个信息是用来防止跨站点请求伪造的，解决此问题有两种方案：</p>
+<ol>
+<li>关闭CSRF安全策略，不可取</li>
+<li>请求一个crumb，<font color="red">需要加上jenkins用户名密码，其他请求也是</font></li>
+</ol>
+<h4 id="subcase，get-crumb"><a href="#subcase，get-crumb" class="headerlink" title="subcase，get crumb"></a>subcase，get crumb</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// GET请求crumb</span><br><span class="line">GET http://localhost:11111/crumbIssuer/api/json</span><br><span class="line">// 返回json</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"_class"</span>: <span class="string">"hudson.security.csrf.DefaultCrumbIssuer"</span>,</span><br><span class="line">    <span class="attr">"crumb"</span>: <span class="string">"7325742b8283ee86bd78d1cb82765a53"</span>,</span><br><span class="line">    <span class="attr">"crumbRequestField"</span>: <span class="string">"Jenkins-Crumb"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="带crumb的case1"><a href="#带crumb的case1" class="headerlink" title="带crumb的case1"></a>带crumb的case1</h3><p>在case1的基础上，在请求头加上<code>&quot;Jenkins-Crumb&quot;:&quot;7325742b8283ee86bd78d1cb82765a53&quot;</code>，再次发送请求，返回<code>Status : 201 Created</code>，表示构建进入调度队列，jenkins会调度执行。</p>
+<p>值得注意的是，build任务的响应头中包括了一个位置信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Date →Wed, 29 May 2019 03:31:47 GMT</span><br><span class="line">X-Content-Type-Options →nosniff</span><br><span class="line">Location →http://localhost:11111/queue/item/16/</span><br><span class="line">Content-Length →0</span><br><span class="line">Server →Jetty(9.4.z-SNAPSHOT)</span><br></pre></td></tr></table></figure>
+<p>Location指明了这次build触发的queueId：16</p>
+<h2 id="获取构建详情"><a href="#获取构建详情" class="headerlink" title="获取构建详情"></a>获取构建详情</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">Method: GET/POST</span><br><span class="line">Url: http://localhost:11111/job/maven-hello-world/16/api/xml</span><br><span class="line">Response:</span><br><span class="line"><span class="tag">&lt;<span class="name">mavenModuleSetBuild</span> <span class="attr">_class</span>=<span class="string">'hudson.maven.MavenModuleSetBuild'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">_class</span>=<span class="string">'hudson.model.CauseAction'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">cause</span> <span class="attr">_class</span>=<span class="string">'hudson.model.Cause$UserIdCause'</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">shortDescription</span>&gt;</span>Started by user admin<span class="tag">&lt;/<span class="name">shortDescription</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">userId</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">userId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">userName</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">userName</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">cause</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">_class</span>=<span class="string">'hudson.plugins.git.util.BuildData'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">buildsByBranchName</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">refsremotesoriginmaster</span> <span class="attr">_class</span>=<span class="string">'hudson.plugins.git.util.Build'</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">buildNumber</span>&gt;</span>16<span class="tag">&lt;/<span class="name">buildNumber</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">marked</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">branch</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">name</span>&gt;</span>refs/remotes/origin/master<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">branch</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">marked</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">revision</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">branch</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">name</span>&gt;</span>refs/remotes/origin/master<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">branch</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">revision</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">refsremotesoriginmaster</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">buildsByBranchName</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">lastBuiltRevision</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">branch</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">SHA1</span>&gt;</span>b5e89b3eba13533ab141e3e2a71f768613f8ec63<span class="tag">&lt;/<span class="name">SHA1</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>refs/remotes/origin/master<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">branch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">lastBuiltRevision</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">remoteUrl</span>&gt;</span>https://github.com/nywitness/springmvc-demo.git<span class="tag">&lt;/<span class="name">remoteUrl</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scmName</span>&gt;</span><span class="tag">&lt;/<span class="name">scmName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">_class</span>=<span class="string">'hudson.plugins.git.GitTagAction'</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">_class</span>=<span class="string">'hudson.maven.reporters.MavenAggregatedArtifactRecord'</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span>&gt;</span><span class="tag">&lt;/<span class="name">action</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">building</span>&gt;</span>false<span class="tag">&lt;/<span class="name">building</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">displayName</span>&gt;</span>#16<span class="tag">&lt;/<span class="name">displayName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">duration</span>&gt;</span>26345<span class="tag">&lt;/<span class="name">duration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">estimatedDuration</span>&gt;</span>29204<span class="tag">&lt;/<span class="name">estimatedDuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">fullDisplayName</span>&gt;</span>maven-hello-world #16<span class="tag">&lt;/<span class="name">fullDisplayName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>16<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">keepLog</span>&gt;</span>false<span class="tag">&lt;/<span class="name">keepLog</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">number</span>&gt;</span>16<span class="tag">&lt;/<span class="name">number</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">queueId</span>&gt;</span>16<span class="tag">&lt;/<span class="name">queueId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span>&gt;</span>SUCCESS<span class="tag">&lt;/<span class="name">result</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">timestamp</span>&gt;</span>1559100714301<span class="tag">&lt;/<span class="name">timestamp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://localhost:11111/job/maven-hello-world/16/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">builtOn</span>&gt;</span><span class="tag">&lt;/<span class="name">builtOn</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">changeSet</span> <span class="attr">_class</span>=<span class="string">'hudson.plugins.git.GitChangeSetList'</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">kind</span>&gt;</span>git<span class="tag">&lt;/<span class="name">kind</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">changeSet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mavenArtifacts</span>&gt;</span><span class="tag">&lt;/<span class="name">mavenArtifacts</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mavenVersionUsed</span>&gt;</span>3.6.1<span class="tag">&lt;/<span class="name">mavenVersionUsed</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mavenModuleSetBuild</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到构建结果<code>&lt;result&gt;SUCCESS&lt;/result&gt;</code>，表示构建成功，再通过tomcat访问，看看是否发布成功即可。如果没有成功，需要查看构建后操作中配置的tomcat信息是否正确，并且需要在Build之前就已经启动tomcat，否则会报错。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用户凭证"><span class="toc-number">2.1.</span> <span class="toc-text">用户凭证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#全局工具配置"><span class="toc-number">2.2.</span> <span class="toc-text">全局工具配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#环境配置"><span class="toc-number">2.3.</span> <span class="toc-text">环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目配置"><span class="toc-number">2.4.</span> <span class="toc-text">项目配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git"><span class="toc-number">2.4.1.</span> <span class="toc-text">git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#build"><span class="toc-number">2.4.2.</span> <span class="toc-text">build</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构建后操作"><span class="toc-number">2.4.3.</span> <span class="toc-text">构建后操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Build"><span class="toc-number">3.1.</span> <span class="toc-text">Build</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#case1"><span class="toc-number">3.1.1.</span> <span class="toc-text">case1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#subcase，get-crumb"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">subcase，get crumb</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#带crumb的case1"><span class="toc-number">3.1.2.</span> <span class="toc-text">带crumb的case1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取构建详情"><span class="toc-number">3.2.</span> <span class="toc-text">获取构建详情</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&text=Jenkins Rest Api试用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&is_video=false&description=Jenkins Rest Api试用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Jenkins Rest Api试用&body=Check out this article: http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&title=Jenkins Rest Api试用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2019/05/29/Jenkins-Rest-Api试用/&name=Jenkins Rest Api试用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 nywitness
+    <a href="https://hexo.io/">Hexo</a> Theme <a href="https://github.com/probberechts/hexo-theme-cactus">Cactus</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b077c36b6e3bb25fa043a94b25d8c4f3";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
