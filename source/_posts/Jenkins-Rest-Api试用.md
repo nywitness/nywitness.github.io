@@ -1,7 +1,7 @@
 ---
-title: Jenkins Rest Api试用
+title: jenkins Rest Api试用
 date: 2019-05-29 10:29:26
-tags: Jenkins
+tags: jenkins
 ---
 
 # 安装
