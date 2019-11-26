@@ -14,14 +14,10 @@
 <meta property="og:site_name" content="nywitness">
 <meta property="og:description" content="今年工作的重点是运维系统的自动化部署模块，目前开发完成，为了方便测试，需要用jenkins将go程序自动部署到测试服务器，本文重温一下jenkins配置的美妙旅程。  基础配置go配置和配置jdk，maven或git一样，通常想在jenkins中使用go编译，需要在jenkins的global tools中配置go的安装路径。本文案例中由于使用了gox这个跨平台编译工具，不需要进行相关配置。 w">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V11kbmks01scgX/d.D5S9pcTgW5k3a9Wkj7*9TJBjR7ExEYLxg7.y23EEQ!/b/dE0BAAAAAAAA&bo=VwNxAQAAAAADBwY!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V11kbmks01scgX/PZEIRftAfSCyNPJaihQNgS*Hyer1tkN20RoP26zQ818!/b/dLgAAAAAAAAA&bo=XgWvAQAAAAADB9c!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V11kbmks01scgX/lerT7y3SNJ4g6Gcp6jGQRMs6oqVSsQ6VCohhVVrgs*w!/b/dFIBAAAAAAAA&bo=uAEDAQAAAAADB5k!&rf=viewer_4">
-<meta property="og:updated_time" content="2019-09-05T05:42:44.017Z">
+<meta property="og:updated_time" content="2019-11-26T02:54:33.960Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jenkins远程部署go程序">
 <meta name="twitter:description" content="今年工作的重点是运维系统的自动化部署模块，目前开发完成，为了方便测试，需要用jenkins将go程序自动部署到测试服务器，本文重温一下jenkins配置的美妙旅程。  基础配置go配置和配置jdk，maven或git一样，通常想在jenkins中使用go编译，需要在jenkins的global tools中配置go的安装路径。本文案例中由于使用了gox这个跨平台编译工具，不需要进行相关配置。 w">
-<meta name="twitter:image" content="http://m.qpic.cn/psb?/V11kbmks01scgX/d.D5S9pcTgW5k3a9Wkj7*9TJBjR7ExEYLxg7.y23EEQ!/b/dE0BAAAAAAAA&bo=VwNxAQAAAAADBwY!&rf=viewer_4">
     
     
         
@@ -151,8 +147,7 @@
 <p>今年工作的重点是运维系统的自动化部署模块，目前开发完成，为了方便测试，需要用jenkins将go程序自动部署到测试服务器，本文重温一下jenkins配置的美妙旅程。</p>
 </blockquote>
 <h2 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h2><h3 id="go配置"><a href="#go配置" class="headerlink" title="go配置"></a>go配置</h3><p>和配置jdk，maven或git一样，通常想在jenkins中使用go编译，需要在jenkins的global tools中配置go的安装路径。本文案例中由于使用了gox这个跨平台编译工具，不需要进行相关配置。</p>
-<h3 id="windows-server配置"><a href="#windows-server配置" class="headerlink" title="windows server配置"></a>windows server配置</h3><p>因为需要将文件传输到目标服务器的目标文件夹，而目标服务器又是windows server，本身不具有linux系统自带的ssh连接功能，需要曲线救国。本文案例是通过powershell server实现windows的ssh链接功能。效果如图：</p>
-<p><img src="http://m.qpic.cn/psb?/V11kbmks01scgX/d.D5S9pcTgW5k3a9Wkj7*9TJBjR7ExEYLxg7.y23EEQ!/b/dE0BAAAAAAAA&amp;bo=VwNxAQAAAAADBwY!&amp;rf=viewer_4" alt></p>
+<h3 id="windows-server配置"><a href="#windows-server配置" class="headerlink" title="windows server配置"></a>windows server配置</h3><p>因为需要将文件传输到目标服务器的目标文件夹，而目标服务器又是windows server，本身不具有linux系统自带的ssh连接功能，需要曲线救国。本文案例是通过powershell server实现windows的ssh链接功能。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hostname: 远程机器ip</span><br><span class="line">port: 端口号 默认22</span><br><span class="line">Credentials: 远程机器登录账户和密码，在jenkins凭证中维护</span><br></pre></td></tr></table></figure>
 <p>Check connection返回成功即可。</p>
 <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>从A机器下载源码，打包编译出可执行文件，传输到B机器的指定路径下，kill正在运行的进程，重启该进程。</p>
@@ -171,12 +166,9 @@
 <h3 id="参数化构建"><a href="#参数化构建" class="headerlink" title="参数化构建"></a>参数化构建</h3><p>jenkins参数化构建，是在构建时给参数赋值，并在构建过程中替换参数位置，案例中使用gox包编译不同平台的可执行文件，所以使用os参数表示操作系统，分别传入windows、linux等。</p>
 <p>实际操作过程中，当使用<code>${os}</code>注入命令时，jenkins构建失败：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\jenkins-2.164.3\workspace\go-test&gt;C:\Go\projects\bin\gox.exe -osarch &quot;$&#123;os&#125;/amd64&quot; </span><br><span class="line">No valid platforms to build for. If you specified a value</span><br><span class="line">for the &apos;os&apos;, &apos;arch&apos;, or &apos;osarch&apos; flags, make sure you&apos;re</span><br><span class="line">using a valid value.</span><br></pre></td></tr></table></figure>
-<p>可以看到，<code>${os}</code>被原样输出，并没有赋值，看样子猜错了使用方式。回去看参数化构建插件的说明，发现了问题所在：</p>
-<p><img src="http://m.qpic.cn/psb?/V11kbmks01scgX/PZEIRftAfSCyNPJaihQNgS*Hyer1tkN20RoP26zQ818!/b/dLgAAAAAAAAA&amp;bo=XgWvAQAAAAADB9c!&amp;rf=viewer_4" alt></p>
-<p>windows系统需要使用<code>%parameter%</code>方式注入，跟环境变量方式相同，改成<code>%os%</code>之后，构建成功。</p>
+<p>可以看到，<code>${os}</code>被原样输出，并没有赋值，看样子猜错了使用方式。回去看参数化构建插件的说明，发现了问题所在：windows系统需要使用<code>%parameter%</code>方式注入，跟环境变量方式相同，改成<code>%os%</code>之后，构建成功。</p>
 <h3 id="cmd编码"><a href="#cmd编码" class="headerlink" title="cmd编码"></a>cmd编码</h3><p>在jenkins构建任务中，如果配置了windows bat命令，执行时会打开cmd运行并将输出返回到jenkins日志中，由于windows cmd使用的是GBK编码，jenkins系统配置的是全局的UTF-8编码，导致jenkins回显的cmd日志乱码。</p>
-<h4 id="解决方案1"><a href="#解决方案1" class="headerlink" title="解决方案1"></a>解决方案1</h4><p><img src="http://m.qpic.cn/psb?/V11kbmks01scgX/lerT7y3SNJ4g6Gcp6jGQRMs6oqVSsQ6VCohhVVrgs*w!/b/dFIBAAAAAAAA&amp;bo=uAEDAQAAAAADB5k!&amp;rf=viewer_4" alt></p>
-<p>win10更新之后，可以将默认编码改为UTF-8，需要重启计算机使之生效，可以在cmd窗口输入<code>chcp</code>查看效果：</p>
+<h4 id="解决方案1"><a href="#解决方案1" class="headerlink" title="解决方案1"></a>解决方案1</h4><p>win10更新之后，可以在区域设置中，将默认编码改为UTF-8，需要重启计算机使之生效，可以在cmd窗口输入<code>chcp</code>查看效果：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nywitness&gt;chcp</span><br><span class="line">Active code page: <span class="number">65001</span></span><br></pre></td></tr></table></figure>
 <h4 id="解决方案2"><a href="#解决方案2" class="headerlink" title="解决方案2"></a>解决方案2</h4><p>每次执行命令之前，先执行<code>chcp 65001</code>，将当次的cmd命令编码设置为65001。</p>
 <blockquote>
