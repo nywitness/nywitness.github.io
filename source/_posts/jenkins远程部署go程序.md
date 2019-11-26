@@ -14,9 +14,7 @@ tags: jenkins
 
 ### windows server配置
 
-因为需要将文件传输到目标服务器的目标文件夹，而目标服务器又是windows server，本身不具有linux系统自带的ssh连接功能，需要曲线救国。本文案例是通过powershell server实现windows的ssh链接功能。效果如图：
-
-![](http://m.qpic.cn/psb?/V11kbmks01scgX/d.D5S9pcTgW5k3a9Wkj7*9TJBjR7ExEYLxg7.y23EEQ!/b/dE0BAAAAAAAA&bo=VwNxAQAAAAADBwY!&rf=viewer_4)
+因为需要将文件传输到目标服务器的目标文件夹，而目标服务器又是windows server，本身不具有linux系统自带的ssh连接功能，需要曲线救国。本文案例是通过powershell server实现windows的ssh链接功能。
 
 ```
 Hostname: 远程机器ip
@@ -66,11 +64,7 @@ for the 'os', 'arch', or 'osarch' flags, make sure you're
 using a valid value.
 ```
 
-可以看到，`${os}`被原样输出，并没有赋值，看样子猜错了使用方式。回去看参数化构建插件的说明，发现了问题所在：
-
-![](http://m.qpic.cn/psb?/V11kbmks01scgX/PZEIRftAfSCyNPJaihQNgS*Hyer1tkN20RoP26zQ818!/b/dLgAAAAAAAAA&bo=XgWvAQAAAAADB9c!&rf=viewer_4)
-
-windows系统需要使用`%parameter%`方式注入，跟环境变量方式相同，改成`%os%`之后，构建成功。
+可以看到，`${os}`被原样输出，并没有赋值，看样子猜错了使用方式。回去看参数化构建插件的说明，发现了问题所在：windows系统需要使用`%parameter%`方式注入，跟环境变量方式相同，改成`%os%`之后，构建成功。
 
 ### cmd编码
 
@@ -78,9 +72,7 @@ windows系统需要使用`%parameter%`方式注入，跟环境变量方式相同
 
 #### 解决方案1
 
-![](http://m.qpic.cn/psb?/V11kbmks01scgX/lerT7y3SNJ4g6Gcp6jGQRMs6oqVSsQ6VCohhVVrgs*w!/b/dFIBAAAAAAAA&bo=uAEDAQAAAAADB5k!&rf=viewer_4)
-
-win10更新之后，可以将默认编码改为UTF-8，需要重启计算机使之生效，可以在cmd窗口输入`chcp`查看效果：
+win10更新之后，可以在区域设置中，将默认编码改为UTF-8，需要重启计算机使之生效，可以在cmd窗口输入`chcp`查看效果：
 
 ```powershell
 C:\Users\nywitness>chcp
